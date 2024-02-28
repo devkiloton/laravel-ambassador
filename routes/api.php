@@ -29,7 +29,7 @@ Route::prefix('admin')->group(function () {
         Route::put('users/update-password', [AuthController::class, 'updatePassword']);
         Route::get('ambassadors', [AmbassadorController::class, 'index']);
         Route::get('users/{id}/links', [LinkController::class, 'index']);
-        Route::get('orrders', [OrderController::class, 'index']);
+        Route::get('orders', [OrderController::class, 'index']);
 
         Route::apiResource('products', ProductController::class);
     });
