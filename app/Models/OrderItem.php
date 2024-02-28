@@ -30,6 +30,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereRevenueAmbassador($value)
  * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereUpdatedAt($value)
  * @method static \Database\Factories\OrderItemFactory factory($count = null, $state = [])
+ * @property string $ambassador_revenue
+ * @property string $admin_revenue
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereAdminRevenue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OrderItem whereAmbassadorRevenue($value)
  * @mixin \Eloquent
  */
 class OrderItem extends Model

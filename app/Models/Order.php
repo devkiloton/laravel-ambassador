@@ -42,6 +42,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Order whereZip($value)
  * @method static \Database\Factories\OrderFactory factory($count = null, $state = [])
+ * @property-read mixed $admin_revenue
+ * @property-read mixed $name
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
+ * @property-read int|null $order_items_count
  * @mixin \Eloquent
  */
 class Order extends Model
@@ -49,4 +53,25 @@ class Order extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    /**
+     * Get the order items for the order. It's a one-to-many relationship.
+     * It can be used as a property, to get all the order items for the order.
+     */
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getAdminRevenueAttribute()
+    {
+        return $this->orderItems->sum(function (OrderItem $item) {
+            return $item->admin_revenue;
+        });
+    }
 }
