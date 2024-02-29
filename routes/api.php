@@ -18,19 +18,29 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-// (uri, [class, method])
-Route::prefix('admin')->group(function () {
+
+function common(string $scope)
+{
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
-    Route::middleware(['auth:sanctum', 'scope.admin'])->group(function () {
+    Route::middleware(['auth:sanctum', $scope])->group(function () {
         Route::get('user', [AuthController::class, 'user']);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::put('users/update', [AuthController::class, 'updateInfo']);
         Route::put('users/update-password', [AuthController::class, 'updatePassword']);
+    });
+}
+
+Route::prefix('admin')->group(function () {
+    common('scope.admin');
+    Route::middleware(['auth:sanctum', 'scope.admin'])->group(function () {
         Route::get('ambassadors', [AmbassadorController::class, 'index']);
         Route::get('users/{id}/links', [LinkController::class, 'index']);
         Route::get('orders', [OrderController::class, 'index']);
-
         Route::apiResource('products', ProductController::class);
     });
+});
+
+Route::prefix('ambassador')->group(function () {
+    common('scope.ambassador');
 });
