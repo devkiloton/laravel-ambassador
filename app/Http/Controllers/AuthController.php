@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        $user = User::create($request->only('first_name', 'last_name', 'email') + ['password' => \Hash::make($request->input('password')), 'is_admin' => 1]);
+        $user = User::create($request->only('first_name', 'last_name', 'email') + ['password' => \Hash::make($request->input('password')), 'is_admin' => $request->path() === 'api/admin/register' ? 1 : 0]);
         return response($user, Response::HTTP_CREATED);
     }
 
@@ -26,7 +26,18 @@ class AuthController extends Controller
         }
 
         $user = \Auth::user();
-        $token = $user->createToken('token', ['admin'])->plainTextToken;
+
+        $isAdmin = $request->path() === 'api/admin/login';
+
+        if ($isAdmin && !$user->is_admin) {
+            return response([
+                'error' => 'Access denied'
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        $scope = $isAdmin ? 'admin' : 'ambassador';
+
+        $token = $user->createToken('token', [$scope])->plainTextToken;
         $cookie = cookie('jwt', $token, 60 * 24); // 1 day
         return response([
             'message' => 'Success'
