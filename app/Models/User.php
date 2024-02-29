@@ -35,6 +35,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @property-read mixed $revenue
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -51,4 +52,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function getRevenueAttribute()
+    {
+        return $this->orders->sum(fn (Order $order) => $order->ambassador_revenue);
+    }
 }
