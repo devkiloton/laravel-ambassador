@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Link;
 use App\Models\LinkProduct;
 use Illuminate\Http\Request;
+use Str;
 
 class LinkController extends Controller
 {
@@ -17,7 +18,7 @@ class LinkController extends Controller
     {
         $link = Link::create([
             'user_id' => $request->user()->id,
-            'code' => $request->Str::random(6),
+            'code' => Str::random(6),
         ]);
 
         foreach ($request->input('products') as $product_id) {
