@@ -73,18 +73,32 @@ class ProductController extends Controller
 
     /**
      * Display a paginated listing of the resource processed in the backend.
+     * @param Request $request
+     * @requestParam string $search
+     * @requestParam int $page
+     * @requestParam string $sort
      */
     public function backend(Request $request)
     {
         $page = $request->input('page', 1);
         $search = $request->input('search');
         $products = Cache::remember('products_backend', 30, fn () =>  Product::all());
+        $sort = $request->input('sort');
 
         if ($search) {
             $products = $products->filter(fn (Product $product) => Str::contains($product->title, $search) || Str::contains($product->description, $search));
         }
 
         $total = $products->count();
+
+        switch ($sort) {
+            case 'asc':
+                $products = $products->sortBy('price');
+                break;
+            case 'desc':
+                $products = $products->sortByDesc('price');
+                break;
+        }
 
         return [
             'data' => $products->forPage($page, 15)->values(),
