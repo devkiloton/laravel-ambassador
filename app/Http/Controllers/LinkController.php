@@ -33,4 +33,9 @@ class LinkController extends Controller
 
         return response($link, 201);
     }
+
+    public function show($code)
+    {
+        return Link::with('user', 'products')->where('code', $code)->first();
+    }
 }
