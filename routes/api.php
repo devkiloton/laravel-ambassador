@@ -6,6 +6,7 @@ use App\Http\Controllers\LinkController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StatsController;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,4 +59,5 @@ Route::prefix('ambassador')->group(function () {
 Route::prefix('checkout')->group(function () {
     Route::get('links/{code}', [LinkController::class, 'show']);
     Route::post('orders', [OrderController::class, 'store']);
+    Route::post('orders/confirm', [OrderController::class, 'confirm']);
 });

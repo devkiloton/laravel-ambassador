@@ -90,4 +90,20 @@ class OrderController extends Controller
             throw $th;
         }
     }
+
+    public function confirm(Request $request)
+    {
+        $order = Order::where('transaction_id', $request->input('source'))->first();
+        if (!$order) {
+            return response([
+                'error' => 'Order not found'
+            ], 404);
+        }
+        $order->complete = 1;
+        $order->save();
+
+        return [
+            'message' => 'success'
+        ];
+    }
 }
