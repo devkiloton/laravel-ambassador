@@ -6,6 +6,7 @@ use App\Models\Link;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class StatsController extends Controller
 {
@@ -27,13 +28,15 @@ class StatsController extends Controller
 
     public function rankings()
     {
-        $ambassadors = User::ambassadors()->get();
+        // $ambassadors = User::ambassadors()->get();
+        // $rankings = $ambassadors->map(fn (User $user) => [
+        //     'name' => $user->name,
+        //     'revenue' => $user->revenue,
+        // ]);
+        // return $rankings->sortByDesc('revenue')->values();
 
-        $rankings = $ambassadors->map(fn (User $user) => [
-            'name' => $user->name,
-            'revenue' => $user->revenue,
-        ]);
 
-        return $rankings->sortByDesc('revenue')->values();
+        // Should I use a cron job to update the rankings with the command?
+        return Redis::zrevrange('rankings', 0, -1, 'WITHSCORES');
     }
 }
