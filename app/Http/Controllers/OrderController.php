@@ -7,6 +7,7 @@ use App\Models\Link;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use Cartalyst\Stripe\Stripe;
 use DB;
 use Illuminate\Http\Request;
 
@@ -43,6 +44,8 @@ class OrderController extends Controller
 
             $order->save();
 
+            $lineItems = [];
+
             foreach ($request->input('products') as $item) {
                 $product = Product::find($item['product_id']);
 
@@ -54,17 +57,37 @@ class OrderController extends Controller
                 $orderItem->ambassador_revenue = 0.1 * $product->price * $item['quantity'];
                 $orderItem->admin_revenue = 0.9 * $product->price * $item['quantity'];
 
+                $lineItems[] = [
+                    'name' => $product->title,
+                    'description' => $product->description,
+                    'images' => [
+                        $product->image
+                    ],
+                    'amount' => 100 * $product->price,
+                    'currency' => 'usd',
+                    'quantity' => $item['quantity'],
+                ];
+
                 $orderItem->save();
             }
 
+            $stripe = Stripe::make(env('STRIPE_SECRET_KEY'));
+
+            $source = $stripe->checkout()->sessions()->create([
+                'payment_method_types' => ['card'],
+                'line_items' => $lineItems,
+                'success_url' => env('STRIPE_CHECKOUT') . '/success?source={CHECKOUT_SESSION_ID}',
+                'cancel_url' => env('STRIPE_CHECKOUT') . '/error',
+            ]);
+
+            $order->transaction_id = $source['id'];
+            $order->save();
+
             DB::commit();
+            return $source;
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
-
-
-
-        return $order->load("orderItems");
     }
 }
