@@ -36,6 +36,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @property-read mixed $revenue
+ * @property-read mixed $name
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
+ * @property-read int|null $orders_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User ambassadors()
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -55,11 +59,22 @@ class User extends Authenticatable
 
     public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class)->where('complete', 1);
     }
+
+    public function scopeAmbassadors($query)
+    {
+        return $query->where('is_admin', 0);
+    }
+
 
     public function getRevenueAttribute()
     {
         return $this->orders->sum(fn (Order $order) => $order->ambassador_revenue);
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 }
