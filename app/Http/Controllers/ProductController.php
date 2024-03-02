@@ -53,4 +53,20 @@ class ProductController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function frontend()
+    {
+        return Product::all();
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function backend()
+    {
+        return Product::paginate();
+    }
 }
