@@ -51,5 +51,6 @@ Route::prefix('ambassador')->group(function () {
     Route::middleware(['auth:sanctum', 'scope.ambassador'])->group(function () {
         Route::get('stats', [StatsController::class, 'index']);
         Route::get('rankings', [StatsController::class, 'rankings']);
+        Route::post('links', [LinkController::class, 'store']);
     });
 });
