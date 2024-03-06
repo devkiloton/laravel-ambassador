@@ -34,3 +34,52 @@ Now, leave the backend terminal and start the application:
 ```
 php artisan serve
 ```
+### Database diagram
+
+```mermaid
+erDiagram
+    users {
+        Int id PK
+        String username
+        Int serverId FK
+    }
+
+    links {
+        Int id PK
+        String serverName
+    }
+    
+    link_products {
+        Int id PK
+        String serverName
+    }
+
+    products {
+        Int id PK
+        String serverName
+    }
+    
+    orders {
+        Int id PK
+        String serverName
+    }
+
+    order_items {
+        Int id PK
+        String serverName
+    }
+    
+    personal_access_tokens {
+        Int id PK
+        String serverName
+    }
+
+    migrations {
+        Int id PK
+        String serverName
+    }
+
+    users ||--o{ links : user_id
+```
+
+<img width="743" alt="Screenshot 2024-03-06 at 01 39 26" src="https://github.com/devkiloton/laravel-ambassador/assets/78966160/6eced765-e853-4fe1-b99c-bf1f67a87b2f">
