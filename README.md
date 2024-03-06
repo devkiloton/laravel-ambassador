@@ -39,29 +39,38 @@ php artisan serve
 ```mermaid
 erDiagram
     users {
-        int id PK
+        bigint id PK
         varchar first_name
         varchar last_name
         varchar email
         varchar password
-        varchar is_admin
+        tinyint is_admin
         timestamp created_at
         timestamp updated_at
     }
 
     links {
-        Int id PK
-        String serverName
+        bigint id PK
+        varchar code
+        bigint user_id FK
+        timestamp created_at
+        timestamp updated_at
     }
     
     link_products {
-        Int id PK
-        String serverName
+        bigint id PK
+        bigint link_id FK
+        bigint product_id FK
     }
 
     products {
-        Int id PK
-        String serverName
+        bigint id PK
+        varchar title
+        varchar description
+        varchar image
+        decimal price
+        timestamp created_at
+        timestamp updated_at
     }
     
     orders {
