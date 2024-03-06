@@ -93,18 +93,33 @@ erDiagram
     }
 
     order_items {
-        Int id PK
-        String serverName
+        bigint id PK
+        bigint order_id FK
+        varchar product_title
+        decimal price
+        int quantity
+        decimal admin_revenue
+        decimal customer_revenue
+        timestamp created_at
+        timestamp updated_at
     }
     
     personal_access_tokens {
-        Int id PK
-        String serverName
+        bigint id PK
+        varchar tokenable_type
+        bigint tokenable_id
+        varchar name
+        varchar token
+        text abilities
+        timestamp last_used_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     migrations {
-        Int id PK
-        String serverName
+        int id PK
+        varchar migration
+        int batch
     }
 
     orders ||--o{ order_items : order_id
