@@ -39,9 +39,14 @@ php artisan serve
 ```mermaid
 erDiagram
     users {
-        Int id PK
-        String username
-        Int serverId FK
+        int id PK
+        varchar first_name
+        varchar last_name
+        varchar email
+        varchar password
+        varchar is_admin
+        timestamp created_at
+        timestamp updated_at
     }
 
     links {
@@ -79,7 +84,11 @@ erDiagram
         String serverName
     }
 
+    orders ||--o{ order_items : order_id
+    link_products ||--o{ products : product_id
+    link_products ||--o{ links: link_id
     users ||--o{ links : user_id
+    users ||--o{ orders : user_id
 ```
 
 <img width="743" alt="Screenshot 2024-03-06 at 01 39 26" src="https://github.com/devkiloton/laravel-ambassador/assets/78966160/6eced765-e853-4fe1-b99c-bf1f67a87b2f">
