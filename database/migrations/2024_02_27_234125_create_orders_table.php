@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('ambassador_email');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('country')->nullable();
