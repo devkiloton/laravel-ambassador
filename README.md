@@ -74,8 +74,22 @@ erDiagram
     }
     
     orders {
-        Int id PK
-        String serverName
+        bigint id PK
+        varchar transaction_id
+        bigint user_id FK
+        varchar code
+        varchar customer_email
+        varchar first_name
+        varchar last_name
+        varchar email
+        varchar address
+        varchar address2
+        varchar city
+        varchar country
+        varchar zip
+        tinyint complete
+        timestamp created_at
+        timestamp updated_at
     }
 
     order_items {
